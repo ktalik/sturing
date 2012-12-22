@@ -1,4 +1,10 @@
-*.out
+# vim
 *.swp
+# source examples
+*.stu
+# papers
 notes
 doc/*
+# objects, binaries
+*.o
+sturing

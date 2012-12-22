@@ -1,6 +1,11 @@
-/* 
- * sturing - Slimak Turing Machine Simulator
- * 2012-09-11 Konrad Talik
+/*!
+ * \file		sturing.cpp
+ * \brief		sturing - Slimak Turing Machine Simulator
+ * \description	Software Liberation Maniacs Krakow Turing Machine Interpreter and Simulator
+ * \version		0.1212
+ * \date		2012-09-11 - 2012-12-20
+ * \author		Konrad Talik
+ * \license		GNU General Public License
  */
 
 #define VERSION 0.1212
@@ -13,10 +18,11 @@
 
 #include <boost/lexical_cast.hpp>
 #include <cstring>
-#include <string>
-#include <map>
+
+#include "mac/turingmachine.hpp"
 
 using namespace std;
+using namespace sturing;
 
 const char* _prompt = ">>> ";
 
@@ -31,33 +37,17 @@ enum machineMode {
 	JUMP		/**< A jumping into next state mode. */
 };
 
-/**
- * Direction of head movement.
- */
-enum direction { NONE, LEFT, RIGHT, STAY };
-
-/**
- * Turing machine state rule struct.
- * This "nodes" should be indexed by encountered character number.
- * Rule includes all information for every step of Turing Machine:
- * character to be written, which direction to move, in which state to jump.
- * write == -1 - no character
- * jump == -1 - no state change
- */
-struct STuringStateRule {
-	int write;
-	direction move;
-	int jump;
-};
-
 /*
- * Main container of states, and main variables
+ * Main container of states and rules.
  */
-map <int, map <int, STuringStateRule> > TuringMachine;
+TuringMachine machine;
+
+// TODOELETE.
+map <int, map <int, TuringStateRule> > TM;
 
 // Maping of characters
 map<int, string> indexToCharacter;
-map<string, int> characterToIndex;	// moze byc przepelniony przez uzytkownika
+map<string, int> characterToIndex;
 // Maping of states
 map<int, string> indexToState;
 map<string, int> stateToIndex;
@@ -162,12 +152,12 @@ void printBoard() {
 
 					cout <<  indexToCharacter[i] << "| ";
 
-					if ( TuringMachine[j][i].write != 0)
-						cout << indexToCharacter[ TuringMachine[j][i].write ] << ' ';
+					if ( TM[j][i].write != 0)
+						cout << indexToCharacter[ TM[j][i].write ] << ' ';
 					else
 						cout << "- ";
 
-					switch ( TuringMachine[j][i].move  ) {
+					switch ( TM[j][i].move  ) {
 
 						case LEFT:
 							cout << '<';
@@ -188,11 +178,11 @@ void printBoard() {
 					
 					cout << ' ';
 
-					if (TuringMachine[j][i].jump > 0)
-						cout << indexToState[ TuringMachine[j][i].jump ];
-					else if (TuringMachine[j][i].jump == 0)
+					if (TM[j][i].jump > 0)
+						cout << indexToState[ TM[j][i].jump ];
+					else if (TM[j][i].jump == 0)
 						cout << '-';
-					else if (TuringMachine[j][i].jump == -1)
+					else if (TM[j][i].jump == -1)
 						cout << '^';
 
 					cout << " |";
@@ -510,12 +500,12 @@ int main(int argc, char** argv) {
 
 							}
 
-							STuringStateRule newRule;
+							TuringStateRule newRule;
 							newRule.write = currentWriteIndex;
 							newRule.move = currentDirection;
 							newRule.jump = currentJumpIndex;
 
-							TuringMachine[ currentStateIndex ][ currentCharacterIndex ] = newRule;
+							TM[ currentStateIndex ][ currentCharacterIndex ] = newRule;
 									
 							currentMode = ENCOUNTER;
 
