@@ -1,3 +1,7 @@
+/*!
+ * \file		mac/turingmachine.cpp
+ */
+
 #include "mac/turingmachine.hpp"
 
 using namespace sturing;
@@ -21,18 +25,15 @@ int TuringMachine::declareCharacter(std::string givenCharacter) {
 		characterToIndex[givenCharacter] = characterIndex;
 		indexToCharacter[characterIndex] = givenCharacter;
 
-		/*if (_verbose) {	
-				verbosePrint("Starting a definition of a new state '" + currentState + "'.");
+		/*if (_verbose) {
+			verbosePrint("Declaration of a new character '" + givenCharacter + "'.");
+		}
 		}*/
 
 
 	} else {
 
 		characterIndex = characterToIndex[givenCharacter];
-									
-		/*if (_verbose) {	
-				verbosePrint("Starting a new definition of the existing state '" + currentState + "'.");
-		}*/
 
 	}
 
@@ -51,7 +52,7 @@ int TuringMachine::declareState(std::string givenState) {
 		indexToState[stateIndex] = givenState;
 
 		/*if (_verbose) {	
-				verbosePrint("Starting a definition of a new state '" + currentState + "'.");
+				verbosePrint("Declaration of a new state '" + givenState + "'.");
 		}*/
 
 
@@ -59,10 +60,6 @@ int TuringMachine::declareState(std::string givenState) {
 
 		stateIndex = stateToIndex[givenState];
 									
-		/*if (_verbose) {	
-				verbosePrint("Starting a new definition of the existing state '" + currentState + "'.");
-		}*/
-
 	}
 
 	return stateIndex;
@@ -82,4 +79,12 @@ std::map<int, TuringStateRule>& TuringMachine::operator[](size_t index) {
 
 const std::map<int, TuringStateRule> TuringMachine::operator[](size_t index) const {
 	//TODO
+}
+
+int TuringMachine::numberOfCharacters() {
+	return indexToCharacter.size();
+}
+
+int TuringMachine::numberOfStates() {
+	return indexToState.size();
 }

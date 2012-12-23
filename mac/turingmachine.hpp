@@ -89,6 +89,9 @@ struct TuringStateRule {
 		std::map<int, TuringStateRule>& operator[](size_t index);
 		const std::map<int, TuringStateRule> operator[](size_t index) const;
 
+		int numberOfCharacters();
+		int numberOfStates();
+
 	};
 
 }

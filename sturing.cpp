@@ -15,8 +15,6 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <fcntl.h>
-
-#include <boost/lexical_cast.hpp>
 #include <cstring>
 
 #include "mac/turingmachine.hpp"
@@ -37,20 +35,12 @@ enum machineMode {
 	JUMP		/**< A jumping into next state mode. */
 };
 
+
 /*
  * Main container of states and rules.
  */
 TuringMachine machine;
 
-// TODOELETE.
-map <int, map <int, TuringStateRule> > TM;
-
-// Maping of characters
-map<int, string> indexToCharacter;
-map<string, int> characterToIndex;
-// Maping of states
-map<int, string> indexToState;
-map<string, int> stateToIndex;
 
 /*
  * Global variables for options.
@@ -83,81 +73,48 @@ void verbosePrint(string contents) {
 	cout << "[I] " << contents << '\n';
 };
 
-/*************************//**
- * Useful interpreter methods.
- ****************************/
-
-/** 
- * If state does not exist (is not declared) creates a state and assigns to it an unique index.
- * Otherwise the index is taken from the dictionary.
-   @param currentState Current state name.
- */
-int determineStateIndex(string currentState) {
-	
-	int currentStateIndex = -1;
-
-	// State does not exist.
-	if ( stateToIndex[currentState] == 0 ) {
-
-		currentStateIndex = stateToIndex.size();
-		stateToIndex[currentState] = currentStateIndex;
-		indexToState[currentStateIndex] = currentState;
-
-		if (_verbose) {	
-				verbosePrint("Starting a definition of new state '" + currentState + "'.");
-		}
-
-
-	} else {
-
-		currentStateIndex = stateToIndex[currentState];
-									
-		if (_verbose) {	
-				verbosePrint("Starting a definition of existing state '" + currentState + "'.");
-		}
-
-	}
-
-	return currentStateIndex;
-
-}
-
 
 /**
  * Printing a board of states.
  */
 void printBoard() {
 
-	for (int s = 1; s <= stateToIndex.size(); ++s) {
-		cout << "|*|" << "   " << indexToState[s] << "   ";
+	cout << "|*|" << "   " << machine.getState(1) << "   ";
+	
+	for (int s = 2; s <= machine.numberOfStates(); ++s) {
+		cout <</* "|*" <<*/ "|   " << machine.getState(s) << "   ";
 	};
 
 	cout << '|' << endl;
 	
 	cout << "|-|";
 	
-	for (int s = 1; s <= stateToIndex.size(); ++s) {
+	for (int s = 1; s <= machine.numberOfStates(); ++s) {
 		if (s > 1)
-			cout << "|-|";
+			cout << "+";//"|-|";
 		cout << "-------";
 	};
 
 	cout << '|' << endl;
 
-	for (int i = 1; i <= characterToIndex.size(); ++i) {
+	for (int i = 1; i <= machine.numberOfCharacters(); ++i) {
 
 			cout << '|';
 
-			for (int j = 1; j <= stateToIndex.size(); ++j) {
+			for (int j = 1; j <= machine.numberOfStates(); ++j) {
 
-					cout <<  indexToCharacter[i] << "| ";
+					if (j == 1) {
+						cout <<  machine.getCharacter(i) << "| ";
+					} else {
+						cout << " ";
+					}
 
-					if ( TM[j][i].write != 0)
-						cout << indexToCharacter[ TM[j][i].write ] << ' ';
+					if ( machine[j][i].write != 0)
+						cout << machine.getCharacter( machine[j][i].write ) << ' ';
 					else
 						cout << "- ";
 
-					switch ( TM[j][i].move  ) {
+					switch ( machine[j][i].move  ) {
 
 						case LEFT:
 							cout << '<';
@@ -178,11 +135,11 @@ void printBoard() {
 					
 					cout << ' ';
 
-					if (TM[j][i].jump > 0)
-						cout << indexToState[ TM[j][i].jump ];
-					else if (TM[j][i].jump == 0)
+					if (machine[j][i].jump > 0)
+						cout << machine.getState( machine[j][i].jump );
+					else if (machine[j][i].jump == 0)
 						cout << '-';
-					else if (TM[j][i].jump == -1)
+					else if (machine[j][i].jump == -1)
 						cout << '^';
 
 					cout << " |";
@@ -328,8 +285,12 @@ int main(int argc, char** argv) {
 								
 								currentState = word.substr(0,length-1);
 
-								currentStateIndex = determineStateIndex(currentState);
+								currentStateIndex = machine.declareState(currentState);
 								currentMode = ENCOUNTER;
+
+								if (_verbose) {	
+									verbosePrint("Starting a new definition of the state '" + currentState + "'.");
+								}
 							
 							} else {
 
@@ -352,37 +313,14 @@ int main(int argc, char** argv) {
 									// and next state definition started - syntax error?
 
 									currentState = word.substr(0,length-1);
-									currentStateIndex = determineStateIndex(currentState);
+									currentStateIndex = machine.declareState(currentState);
 									currentMode = ENCOUNTER;
 
 								} else {
-							
-									// Character does not exist in alphabet.
-									if (characterToIndex[currentCharacter] == 0) {
 
-										currentCharacterIndex = characterToIndex.size();
-										characterToIndex[currentCharacter] = currentCharacterIndex;
-										indexToCharacter[currentCharacterIndex] = currentCharacter;
-
-										currentMode = WRITE;
-
-										if (_verbose) {
-											verbosePrint("New character '" + currentCharacter + "' added with index "
-												+ boost::lexical_cast<string>(characterToIndex[currentCharacter])
-												+ ". Setting a rule for encountering.");
-										}
-
-									// Character exist.
-									} else {
-										
-										currentCharacterIndex = characterToIndex[currentCharacter];
-										currentMode = WRITE;
-
-										if (_verbose) {
-											verbosePrint("Setting a new rule for encountering the character '"
-												+ currentCharacter + "'.");
-										}
-									}
+									// Check the index of character, or - if not exist - add to alphabet.
+									currentCharacterIndex = machine.declareCharacter(currentCharacter);
+									currentMode = WRITE;
 
 								}	
 							
@@ -393,32 +331,11 @@ int main(int argc, char** argv) {
 						case WRITE:
 
 							currentWrite = word;
-							currentWriteIndex = characterToIndex[word];
-
-							// Not in alphabet.
-							if (currentWriteIndex == 0) {
-								
-								currentWriteIndex = characterToIndex.size();
-								characterToIndex[currentWrite] = currentWriteIndex;
-								indexToCharacter[currentWriteIndex] = currentWrite;
-
-								currentMode = MOVE;
-
-								if (_verbose) {
-									verbosePrint("New character '" + currentWrite + "' added with index "
-										+ boost::lexical_cast<string>(characterToIndex[currentCharacter])
-										+ ". Setting to write a character within this rule.");
-								}
-
-							// Character in alphabet.
-							} else {
-
-								currentMode = MOVE;
-
-								if (_verbose) {
-									verbosePrint("Setting to write a character '" + currentWrite + "' within this rule.");
-								}
-
+							currentWriteIndex = machine.declareCharacter(word);
+							currentMode = MOVE;
+							
+							if (_verbose) {
+								verbosePrint("Setting to write a character '" + currentWrite + "' within this rule.");
 							}
 
 						break;
@@ -478,25 +395,10 @@ int main(int argc, char** argv) {
 									verbosePrint("Setting to end the machine process.");
 								}
 
-							// State dont exist.
-							} else if ( stateToIndex[currentJump] == 0) {
-
-								currentJumpIndex = stateToIndex.size();
-								stateToIndex[currentJump] = currentJumpIndex;
-								indexToState[currentJumpIndex] = currentJump;
-
-								if (_verbose) {	
-									verbosePrint("Jumping to undefined state '" + currentJump + "'.");
-								}
-
-
+							// Jump to the state.
 							} else {
 
-								currentJumpIndex = stateToIndex[currentJump];
-									
-								if (_verbose) {	
-									verbosePrint("Jumping to the state '" + currentJump + "'.");
-								}
+								currentJumpIndex = machine.declareState(currentJump);
 
 							}
 
@@ -505,7 +407,7 @@ int main(int argc, char** argv) {
 							newRule.move = currentDirection;
 							newRule.jump = currentJumpIndex;
 
-							TM[ currentStateIndex ][ currentCharacterIndex ] = newRule;
+							machine[ currentStateIndex ][ currentCharacterIndex ] = newRule;
 									
 							currentMode = ENCOUNTER;
 
