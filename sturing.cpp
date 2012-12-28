@@ -1,16 +1,15 @@
 /*!
  * \file		sturing.cpp
- * \brief		sturing - Slimak Turing Machine Simulator
- * \description	Software Liberation Maniacs Krakow Turing Machine Interpreter and Simulator
+ * \brief		sturing - Simple Turing Machine / Slimak Turing Machine
+ * \description	Simple Turing Machine Interpreter and Simulator
  * \version		0.1212
- * \date		2012-09-11 - 2012-12-20
+ * \date		2012-09-11 - 2012-12-28
  * \author		Konrad Talik
  * \license		GNU General Public License
  */
 
 #define VERSION 0.1212
 
-#include <iostream>
 #include <cstdlib>
 #include <ctype.h>
 #include <unistd.h>
@@ -29,7 +28,7 @@ const char* _prompt = ">>> ";
  */
 enum machineMode {
 	STATE, 		/**< Machine state and state name declaration mode. */
-	ENCOUNTER, 	/**< A character encounter in current state mode. */
+	MEETING, 	/**< A character encounter in current state mode. */
 	WRITE, 		/**< A character writing mode. */
 	MOVE, 		/**< A head movement mode. */
 	JUMP		/**< A jumping into next state mode. */
@@ -160,8 +159,10 @@ int main(int argc, char** argv) {
 	 */
 
 	bool _onlyBoard = false;
+	bool _initialTape = false;
 
 	string _fileName;
+	bool sourceLoaded = false;
 	
 	if (argc > 1) {
 		string argument;
@@ -191,34 +192,48 @@ int main(int argc, char** argv) {
 			} else if (argument.compare("-t") == 0 || argument.compare("--state-board") == 0) {
 				_onlyBoard = true;
 
+			// Print the intial tape.
+			} else if (argument.compare("-i") == 0 || argument.compare("--initial-tape") == 0) {
+				_initialTape = true;
+
 			// Unknown option - source file.
-			} else {
+			} else if (not sourceLoaded) {
 				
 				// Try to open the file
 				int source = open(argument.c_str(), ios::in);
 				if (source < 0) {
-					cout << "[E] No such file or directory: " << argument << ".\n";
+					cout << "[E] No such source file or directory: '" << argument << "'.\n";
 					return 1;
 
 				// Redirect standard input to file
 				} else if ( dup2(source,0) < 0) {
-					cout << "[E] Error reading file " << argument << ".\n";
+					cout << "[E] Error reading source file '" << argument << "'.\n";
 					return 2;
 				}
 
 				// Done opening
 				_interactive = false;
 				_fileName = argument;
+				sourceLoaded = true;
+			
+			// If source loaded - tape file.
+			} else {
+				
+				machine.loadTape( argument );
+
 			}
 		}
 	}
+
+	if (_initialTape)
+		machine.printTape();
 
 	/*
 	 * Interpreter startup - welcome message if interactive.
 	 */
 
 	if (_interactive) {
-		cout << "STuring " << VERSION << " - Turing Machine interpreter.\n";
+		cout << "STuring " << VERSION << " - Simple Turing Machine interpreter.\n";
 		cout << _prompt;
 	}
 
@@ -284,12 +299,11 @@ int main(int argc, char** argv) {
 							if (word[length-1] == ':' ) {
 								
 								currentState = word.substr(0,length-1);
-
 								currentStateIndex = machine.declareState(currentState);
-								currentMode = ENCOUNTER;
+								currentMode = MEETING;
 
 								if (_verbose) {	
-									verbosePrint("Starting a new definition of the state '" + currentState + "'.");
+									verbosePrint("[NEW STATE DEF] Starting a new definition of the state '" + currentState + "'.");
 								}
 							
 							} else {
@@ -302,7 +316,7 @@ int main(int argc, char** argv) {
 						break;
 
 						// Encounter of a character.
-						case ENCOUNTER:
+						case MEETING:
 
 							currentCharacter = word;
 								
@@ -314,13 +328,21 @@ int main(int argc, char** argv) {
 
 									currentState = word.substr(0,length-1);
 									currentStateIndex = machine.declareState(currentState);
-									currentMode = ENCOUNTER;
+									currentMode = MEETING;
+								
+									if (_verbose) {	
+										verbosePrint("[NEW STATE DEF] Starting a new definition of the state '" + currentState + "'.");
+									}
 
 								} else {
 
 									// Check the index of character, or - if not exist - add to alphabet.
 									currentCharacterIndex = machine.declareCharacter(currentCharacter);
 									currentMode = WRITE;
+							
+									if (_verbose) {
+										verbosePrint("[MEETING] Starting a new rule with meeting the character '" + currentCharacter + "'.");
+									}
 
 								}	
 							
@@ -335,7 +357,7 @@ int main(int argc, char** argv) {
 							currentMode = MOVE;
 							
 							if (_verbose) {
-								verbosePrint("Setting to write a character '" + currentWrite + "' within this rule.");
+								verbosePrint("[WRITE] Setting to write a character '" + currentWrite + "' within this rule.");
 							}
 
 						break;
@@ -353,7 +375,7 @@ int main(int argc, char** argv) {
 								currentMode = JUMP;
 								
 								if (_verbose) {
-									verbosePrint("Setting to move machine head right within this rule.");
+									verbosePrint("[MOVE] Setting to move machine head right within this rule.");
 								}
 
 							} else if ( word[0] == '<'
@@ -364,7 +386,7 @@ int main(int argc, char** argv) {
 								currentMode = JUMP;
 								
 								if (_verbose) {
-									verbosePrint("Setting to move machine head left within this rule.");
+									verbosePrint("[MOVE] Setting to move machine head left within this rule.");
 								}
 
 							} else if ( word[0] == '='
@@ -375,7 +397,7 @@ int main(int argc, char** argv) {
 								currentMode = JUMP;
 								
 								if (_verbose) {
-									verbosePrint("Setting to not move machine head within this rule.");
+									verbosePrint("[MOVE] Setting to not move machine head within this rule.");
 								}
 
 							}
@@ -392,7 +414,7 @@ int main(int argc, char** argv) {
 								currentJumpIndex = -1;
 								
 								if (_verbose) {	
-									verbosePrint("Setting to end the machine process.");
+									verbosePrint("[JUMP] Setting to end the machine process within this rule.");
 								}
 
 							// Jump to the state.
@@ -409,7 +431,7 @@ int main(int argc, char** argv) {
 
 							machine[ currentStateIndex ][ currentCharacterIndex ] = newRule;
 									
-							currentMode = ENCOUNTER;
+							currentMode = MEETING;
 
 						break;
 					}

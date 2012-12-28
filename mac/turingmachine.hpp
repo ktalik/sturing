@@ -1,7 +1,7 @@
 /*!
  * \file 		mac/turingmachine.hpp
  * \brief		A Turing Machine implementation and its help structures.
- * \date		2012-12-20
+ * \date		2012-12-20 - 2012-12-28
  * \author		Konrad Talik
  * \copyright	GNU General Public License.
  */
@@ -9,7 +9,10 @@
 #ifndef __STURINGMACHINE__
 #define __STURINGMACHINE__
 
+#include <iostream>
+#include <fstream>
 #include <string>
+#include <list>
 #include <map>
 
 namespace sturing {
@@ -42,6 +45,10 @@ struct TuringStateRule {
 
 		//! Main container of rules in states.
 		std::map <int, std::map <int, TuringStateRule> > machine;
+
+		//! Machine tape.
+		std::list<int> tape;
+		std::list<int>::iterator head;
 
 		//! Double-side maping of characters.
 		std::map<int, std::string> indexToCharacter;
@@ -91,6 +98,12 @@ struct TuringStateRule {
 
 		int numberOfCharacters();
 		int numberOfStates();
+
+		void loadTape(std::string givenTapeFileName);
+		void putOnTape(int index);
+		void printTape();
+		void moveRight();
+		void moveLeft();
 
 	};
 

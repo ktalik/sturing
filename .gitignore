@@ -2,6 +2,8 @@
 *.swp
 # source examples
 *.stu
+# tapes
+*.tap
 # papers
 notes
 doc/*
