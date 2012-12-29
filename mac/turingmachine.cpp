@@ -26,10 +26,9 @@ int TuringMachine::declareCharacter(std::string givenCharacter) {
 		characterToIndex[givenCharacter] = characterIndex;
 		indexToCharacter[characterIndex] = givenCharacter;
 
-		/*if (_verbose) {
-			verbosePrint("Declaration of a new character '" + givenCharacter + "'.");
+		if (_verbose) {
+			//verbosePrint("[I] Declaration of a new character '" + givenCharacter + "'.");
 		}
-		}*/
 
 
 	} else {
@@ -52,9 +51,9 @@ int TuringMachine::declareState(std::string givenState) {
 		stateToIndex[givenState] = stateIndex;
 		indexToState[stateIndex] = givenState;
 
-		/*if (_verbose) {	
-				verbosePrint("Declaration of a new state '" + givenState + "'.");
-		}*/
+		if (_verbose) {	
+			//verbosePrint("[I] Declaration of a new state '" + givenState + "'.");
+		}
 
 
 	} else {
@@ -67,7 +66,10 @@ int TuringMachine::declareState(std::string givenState) {
 }
 
 std::string TuringMachine::getCharacter(int index) {
-	return indexToCharacter[index];
+	if (index == -1)
+		return "\\=";
+	else
+		return indexToCharacter[index];
 }
 
 std::string TuringMachine::getState(int index) {
@@ -136,7 +138,9 @@ void TuringMachine::putOnTape(int index) {
 
 void TuringMachine::printTape() {
 	for (std::list<int>::iterator it = tape.begin(); it != tape.end(); ++it) {
-		std::cout << getCharacter(*it) << ' ';
+		std::cout << getCharacter(*it);
+		if ( !_noSpaces )
+			std::cout << ' ';
 	}
 	std::cout << std::endl;
 }
@@ -159,4 +163,9 @@ void TuringMachine::moveLeft() {
 		tape.push_front(1);
 	}
 	--head;
+}
+
+void TuringMachine::setOptions(bool verbose, bool noSpaces) {
+	_verbose = verbose;
+	_noSpaces = noSpaces;
 }

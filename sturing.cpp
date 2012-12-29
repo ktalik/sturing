@@ -48,6 +48,10 @@ bool _interactive = true;
 bool _echoMode = false;
 bool _printLines = false;
 bool _verbose = false;
+bool _onlyBoard = false;
+bool _initialTape = false;
+bool _noSpaces = false;
+
 
 /*****************//**
  * Standard messaging.
@@ -158,9 +162,6 @@ int main(int argc, char** argv) {
 	 * Program arguments handling
 	 */
 
-	bool _onlyBoard = false;
-	bool _initialTape = false;
-
 	string _fileName;
 	bool sourceLoaded = false;
 	
@@ -196,6 +197,10 @@ int main(int argc, char** argv) {
 			} else if (argument.compare("-i") == 0 || argument.compare("--initial-tape") == 0) {
 				_initialTape = true;
 
+			// Print the tape without spaces.
+			} else if (argument.compare("-s") == 0 || argument.compare("--no-spaces") == 0) {
+				_noSpaces = true;
+
 			// Unknown option - source file.
 			} else if (not sourceLoaded) {
 				
@@ -224,6 +229,8 @@ int main(int argc, char** argv) {
 			}
 		}
 	}
+
+	machine.setOptions(_verbose, _noSpaces);
 
 	if (_initialTape)
 		machine.printTape();
@@ -266,10 +273,10 @@ int main(int argc, char** argv) {
 
 	int i;
 
-	// Interpreting every line
+	// Interpreting every line.
 	while (getline(cin,line) && line.compare("exit") && line.compare("go") && line.compare("GO")) {
 
-		// Before interpreting
+		// Before interpreting.
 		if (_echoMode) {
 			if (_printLines) {
 				cout << _lineNumber << ": ";
@@ -277,9 +284,9 @@ int main(int argc, char** argv) {
 			cout << line << "\n";
 		}
 
-		// Begin interpreting
+		// Begin interpreting.
 		
-		// Every word in line
+		// Every word in line.
 		line += ' ';
 		found = -1;
 		length = 0;
@@ -288,8 +295,13 @@ int main(int argc, char** argv) {
 				if (isspace(line[i])) {
 					
 					word = line.substr(found,length);
+
+					// If its a comment.
+					if ( word[0] == '/' && word[1] == '/') {
+							continue;
+					}
 					
-					// Interpreting word
+					// Else, interpreting word.
 					
 					switch (currentMode) {
 
@@ -353,7 +365,18 @@ int main(int argc, char** argv) {
 						case WRITE:
 
 							currentWrite = word;
-							currentWriteIndex = machine.declareCharacter(word);
+
+							if ( word.compare("\\=") == 0) {
+								currentWriteIndex = -1;
+							
+							} else if ( word.compare("\\tape" ) == 0) {
+								currentWriteIndex = 0;
+
+							} else {
+								currentWriteIndex = machine.declareCharacter(word);
+							
+							}
+
 							currentMode = MOVE;
 							
 							if (_verbose) {
@@ -367,9 +390,9 @@ int main(int argc, char** argv) {
 							currentDirectionWord = word;
 
 							if ( word[0] == '>'
-								|| word[0] == 'R'
-								|| word[0] == 'P'
-								|| word.compare("stright") == 0) {
+								|| word[0] == 'P' || word[0] == 'p'
+								|| word[0] == 'R' || word[0] == 'r'
+								|| word.compare("\\right") == 0) {
 
 								currentDirection = RIGHT;
 								currentMode = JUMP;
@@ -379,8 +402,8 @@ int main(int argc, char** argv) {
 								}
 
 							} else if ( word[0] == '<'
-								|| word[0] == 'L'
-								|| word.compare("stleft") == 0) {
+								|| word[0] == 'L' || word[0] == 'l'
+								|| word.compare("\\left") == 0) {
 
 								currentDirection = LEFT;
 								currentMode = JUMP;
@@ -390,8 +413,8 @@ int main(int argc, char** argv) {
 								}
 
 							} else if ( word[0] == '='
-								|| word[0] == 'S'
-								|| word.compare("ststay") == 0) {
+								|| word[0] == 'S' || word[0] == 's'
+								|| word.compare("\\stay") == 0) {
 
 								currentDirection = STAY;
 								currentMode = JUMP;
@@ -409,7 +432,7 @@ int main(int argc, char** argv) {
 							currentJump = word;
 
 							// Turn off machine.
-							if ( word[0] == '^' || word[0] == ';' || word.compare("stdone") == 0) {
+							if ( word[0] == '^' || word[0] == ';' || word.compare("\\done") == 0) {
 
 								currentJumpIndex = -1;
 								
@@ -421,6 +444,10 @@ int main(int argc, char** argv) {
 							} else {
 
 								currentJumpIndex = machine.declareState(currentJump);
+
+								if (_verbose) {	
+									verbosePrint("[JUMP] Setting to jump to the state '" + machine.getState(currentJumpIndex) + "' within this rule.");
+								}
 
 							}
 

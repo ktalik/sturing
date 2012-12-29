@@ -60,6 +60,9 @@ struct TuringStateRule {
 		//! Double-side maping of states.
 		std::map<std::string, int> stateToIndex;
 
+		//! Options.
+		bool _noSpaces, _verbose;
+
 	public:
 
 		TuringMachine();
@@ -104,6 +107,8 @@ struct TuringStateRule {
 		void printTape();
 		void moveRight();
 		void moveLeft();
+
+		void setOptions(bool verbose, bool noSpaces);
 
 	};
 
