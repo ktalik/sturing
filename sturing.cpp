@@ -10,153 +10,40 @@
 
 #define VERSION 0.1212
 
-#include <cstdlib>
 #include <ctype.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <cstring>
 
 #include "mac/turingmachine.hpp"
+#include "uti/optionscontainter.hpp"
+#include "int/printer.hpp"
 
 using namespace std;
 using namespace sturing;
 
 const char* _prompt = ">>> ";
 
-/**
- * Current interpreter mode enum.
- */
-enum machineMode {
-	STATE, 		/**< Machine state and state name declaration mode. */
-	MEETING, 	/**< A character encounter in current state mode. */
-	WRITE, 		/**< A character writing mode. */
-	MOVE, 		/**< A head movement mode. */
-	JUMP		/**< A jumping into next state mode. */
-};
-
-
 /*
  * Main container of states and rules.
  */
 TuringMachine machine;
 
+//! Variables for options.
+OptionsContainter options;
 
-/*
- * Global variables for options.
- */
-bool _interactive = true;
-bool _echoMode = false;
-bool _printLines = false;
-bool _verbose = false;
-bool _onlyBoard = false;
-bool _initialTape = false;
-bool _noSpaces = false;
-
-
-/*****************//**
- * Standard messaging.
- ********************/
-
-/**
- * Printing an error message.
- */
-void printError(string file, int line, string contents) {
-	if (_interactive) {
-		cout << "[E] Error: " << contents << '\n';
-	} else {
-		cout << file << ':' << line << ": error: " << contents << '\n';
-		exit(-line);
-	}
-};
-
-/**
- * Printing a verbose text message.
- */
-void verbosePrint(string contents) {
-	cout << "[I] " << contents << '\n';
-};
-
-
-/**
- * Printing a board of states.
- */
-void printBoard() {
-
-	cout << "|*|" << "   " << machine.getState(1) << "   ";
-	
-	for (int s = 2; s <= machine.numberOfStates(); ++s) {
-		cout <</* "|*" <<*/ "|   " << machine.getState(s) << "   ";
-	};
-
-	cout << '|' << endl;
-	
-	cout << "|-|";
-	
-	for (int s = 1; s <= machine.numberOfStates(); ++s) {
-		if (s > 1)
-			cout << "+";//"|-|";
-		cout << "-------";
-	};
-
-	cout << '|' << endl;
-
-	for (int i = 1; i <= machine.numberOfCharacters(); ++i) {
-
-			cout << '|';
-
-			for (int j = 1; j <= machine.numberOfStates(); ++j) {
-
-					if (j == 1) {
-						cout <<  machine.getCharacter(i) << "| ";
-					} else {
-						cout << " ";
-					}
-
-					if ( machine[j][i].write != 0)
-						cout << machine.getCharacter( machine[j][i].write ) << ' ';
-					else
-						cout << "- ";
-
-					switch ( machine[j][i].move  ) {
-
-						case LEFT:
-							cout << '<';
-						break;
-
-						case RIGHT:
-							cout << '>';
-						break;
-
-						case STAY:
-							cout << '=';
-						break;
-
-						case NONE:
-							cout << '-';
-
-					}
-					
-					cout << ' ';
-
-					if (machine[j][i].jump > 0)
-						cout << machine.getState( machine[j][i].jump );
-					else if (machine[j][i].jump == 0)
-						cout << '-';
-					else if (machine[j][i].jump == -1)
-						cout << '^';
-
-					cout << " |";
-
-			}
-
-			cout << endl;
-
-	}
-
-};
-
+//! Printing messages.
+Printer printer;
 
 int main(int argc, char** argv) {
+
+	options.interactive = true;
+	options.echoMode = false;
+	options.printLines = false;
+	options.verbose = false;
+	options.onlyBoard = false;
+	options.initialTape = false;
+	options.noSpaces = false;
 
 	/*
 	 * Program arguments handling
@@ -178,28 +65,28 @@ int main(int argc, char** argv) {
 			
 			// Echo mode - source code printing.
 			} else if ( argument.compare("-e") == 0 || argument.compare("--echo") == 0 ) {
-				_echoMode = true;
+				options.echoMode = true;
 
 			// Echo with lines numbers.
 			} else if ( argument.compare("-l") == 0 || argument.compare("--echo-lines") == 0 ) {
-				_echoMode = true;
-				_printLines = true;
+				options.echoMode = true;
+				options.printLines = true;
 
 			// Be verbose.
 			} else if (argument.compare("-b") == 0 || argument.compare("--verbose") == 0) {
-				_verbose = true;
+				options.verbose = true;
 
 			// Print the table and end the program.
 			} else if (argument.compare("-t") == 0 || argument.compare("--state-board") == 0) {
-				_onlyBoard = true;
+				options.onlyBoard = true;
 
 			// Print the intial tape.
 			} else if (argument.compare("-i") == 0 || argument.compare("--initial-tape") == 0) {
-				_initialTape = true;
+				options.initialTape = true;
 
 			// Print the tape without spaces.
 			} else if (argument.compare("-s") == 0 || argument.compare("--no-spaces") == 0) {
-				_noSpaces = true;
+				options.noSpaces = true;
 
 			// Unknown option - source file.
 			} else if (not sourceLoaded) {
@@ -217,7 +104,7 @@ int main(int argc, char** argv) {
 				}
 
 				// Done opening
-				_interactive = false;
+				options.interactive = false;
 				_fileName = argument;
 				sourceLoaded = true;
 			
@@ -230,16 +117,16 @@ int main(int argc, char** argv) {
 		}
 	}
 
-	machine.setOptions(_verbose, _noSpaces);
+	machine.setOptions(options.verbose, options.noSpaces);
 
-	if (_initialTape)
+	if (options.initialTape)
 		machine.printTape();
 
 	/*
 	 * Interpreter startup - welcome message if interactive.
 	 */
 
-	if (_interactive) {
+	if (options.interactive) {
 		cout << "STuring " << VERSION << " - Simple Turing Machine interpreter.\n";
 		cout << _prompt;
 	}
@@ -277,8 +164,8 @@ int main(int argc, char** argv) {
 	while (getline(cin,line) && line.compare("exit") && line.compare("go") && line.compare("GO")) {
 
 		// Before interpreting.
-		if (_echoMode) {
-			if (_printLines) {
+		if (options.echoMode) {
+			if (options.printLines) {
 				cout << _lineNumber << ": ";
 			}
 			cout << line << "\n";
@@ -314,13 +201,13 @@ int main(int argc, char** argv) {
 								currentStateIndex = machine.declareState(currentState);
 								currentMode = MEETING;
 
-								if (_verbose) {	
-									verbosePrint("[NEW STATE DEF] Starting a new definition of the state '" + currentState + "'.");
+								if (options.verbose) {	
+									printer.verbosePrint("[NEW STATE DEF] Starting a new definition of the state '" + currentState + "'.");
 								}
 							
 							} else {
 
-								printError(_fileName, _lineNumber, 
+								printer.printError(_fileName, _lineNumber, 
 									"Expected state definition beginning. Missing ':' symbol?");
 							
 							}
@@ -342,8 +229,8 @@ int main(int argc, char** argv) {
 									currentStateIndex = machine.declareState(currentState);
 									currentMode = MEETING;
 								
-									if (_verbose) {	
-										verbosePrint("[NEW STATE DEF] Starting a new definition of the state '" + currentState + "'.");
+									if (options.verbose) {	
+										printer.verbosePrint("[NEW STATE DEF] Starting a new definition of the state '" + currentState + "'.");
 									}
 
 								} else {
@@ -352,8 +239,8 @@ int main(int argc, char** argv) {
 									currentCharacterIndex = machine.declareCharacter(currentCharacter);
 									currentMode = WRITE;
 							
-									if (_verbose) {
-										verbosePrint("[MEETING] Starting a new rule with meeting the character '" + currentCharacter + "'.");
+									if (options.verbose) {
+										printer.verbosePrint("[MEETING] Starting a new rule with meeting the character '" + currentCharacter + "'.");
 									}
 
 								}	
@@ -379,8 +266,8 @@ int main(int argc, char** argv) {
 
 							currentMode = MOVE;
 							
-							if (_verbose) {
-								verbosePrint("[WRITE] Setting to write a character '" + currentWrite + "' within this rule.");
+							if (options.verbose) {
+								printer.verbosePrint("[WRITE] Setting to write a character '" + currentWrite + "' within this rule.");
 							}
 
 						break;
@@ -397,8 +284,8 @@ int main(int argc, char** argv) {
 								currentDirection = RIGHT;
 								currentMode = JUMP;
 								
-								if (_verbose) {
-									verbosePrint("[MOVE] Setting to move machine head right within this rule.");
+								if (options.verbose) {
+									printer.verbosePrint("[MOVE] Setting to move machine head right within this rule.");
 								}
 
 							} else if ( word[0] == '<'
@@ -408,8 +295,8 @@ int main(int argc, char** argv) {
 								currentDirection = LEFT;
 								currentMode = JUMP;
 								
-								if (_verbose) {
-									verbosePrint("[MOVE] Setting to move machine head left within this rule.");
+								if (options.verbose) {
+									printer.verbosePrint("[MOVE] Setting to move machine head left within this rule.");
 								}
 
 							} else if ( word[0] == '='
@@ -419,8 +306,8 @@ int main(int argc, char** argv) {
 								currentDirection = STAY;
 								currentMode = JUMP;
 								
-								if (_verbose) {
-									verbosePrint("[MOVE] Setting to not move machine head within this rule.");
+								if (options.verbose) {
+									printer.verbosePrint("[MOVE] Setting to not move machine head within this rule.");
 								}
 
 							}
@@ -436,8 +323,8 @@ int main(int argc, char** argv) {
 
 								currentJumpIndex = -1;
 								
-								if (_verbose) {	
-									verbosePrint("[JUMP] Setting to end the machine process within this rule.");
+								if (options.verbose) {	
+									printer.verbosePrint("[JUMP] Setting to end the machine process within this rule.");
 								}
 
 							// Jump to the state.
@@ -445,8 +332,8 @@ int main(int argc, char** argv) {
 
 								currentJumpIndex = machine.declareState(currentJump);
 
-								if (_verbose) {	
-									verbosePrint("[JUMP] Setting to jump to the state '" + machine.getState(currentJumpIndex) + "' within this rule.");
+								if (options.verbose) {	
+									printer.verbosePrint("[JUMP] Setting to jump to the state '" + machine.getState(currentJumpIndex) + "' within this rule.");
 								}
 
 							}
@@ -480,7 +367,7 @@ int main(int argc, char** argv) {
 		// End interpreting
 
 		// After interpreting
-		if (_interactive) {
+		if (options.interactive) {
 			cout << _prompt;
 		}
 
@@ -489,9 +376,9 @@ int main(int argc, char** argv) {
 
 	// EOF or 'exit' command.
 	
-	if (_onlyBoard) {
+	if (options.onlyBoard) {
 
-		printBoard();
+		printer.printBoard();
 		return 0;
 
 	}

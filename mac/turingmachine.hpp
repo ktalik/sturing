@@ -17,10 +17,24 @@
 
 namespace sturing {
 
+
+/**
+ * Current interpreter mode enum.
+ */
+enum machineMode {
+	STATE, 		/**< Machine state and state name declaration mode. */
+	MEETING, 	/**< A character encounter in current state mode. */
+	WRITE, 		/**< A character writing mode. */
+	MOVE, 		/**< A head movement mode. */
+	JUMP		/**< A jumping into next state mode. */
+};
+
+
 /*!
  * Direction of head movement.
  */
 enum direction { NONE, LEFT, RIGHT, STAY };
+
 
 /*!
  * \brief		Turing Machine state rule struct.
@@ -32,6 +46,7 @@ struct TuringStateRule {
 	direction move;
 	int jump;
 };
+
 
 	/*!
 	 * \brief		A Turing Machine implementation.
