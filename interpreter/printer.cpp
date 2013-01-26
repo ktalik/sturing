@@ -5,7 +5,7 @@
  * \copyright	GNU General Public License.
  */
 
-#include "int/printer.hpp"
+#include "interpreter/printer.hpp"
 #include <cstdlib>
 #include <iostream>
 

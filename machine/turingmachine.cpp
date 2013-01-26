@@ -2,7 +2,7 @@
  * \file		mac/turingmachine.cpp
  */
 
-#include "mac/turingmachine.hpp"
+#include "machine/turingmachine.hpp"
 
 using namespace sturing;
 

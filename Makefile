@@ -2,13 +2,13 @@
 # STuring makefile.
 
 # Machine-related clases.
-MAC=$(wildcard mac/*.cpp)
+MAC=$(wildcard machine/*.cpp)
 
 # Interpreter-related classes.
-INT=$(wildcard int/*.cpp)
+INT=$(wildcard interpreter/*.cpp)
 
 # Utiility classes.
-UTI=$(wildcard uti/*.cpp)
+UTI=$(wildcard util/*.cpp)
 
 OBJECTS=$(patsubst %.cpp, %.o, $(MAC) $(INT) $(UTI))
 CC=g++

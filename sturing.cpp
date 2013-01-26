@@ -15,9 +15,9 @@
 #include <fcntl.h>
 #include <cstring>
 
-#include "mac/turingmachine.hpp"
-#include "uti/optionscontainter.hpp"
-#include "int/printer.hpp"
+#include "machine/turingmachine.hpp"
+#include "util/optionscontainter.hpp"
+#include "interpreter/printer.hpp"
 
 using namespace std;
 using namespace sturing;

@@ -9,8 +9,8 @@
 #ifndef __STURINGPRINTER__
 #define __STURINGPRINTER__
 
-#include "mac/turingmachine.hpp"
-#include "uti/optionscontainter.hpp"
+#include "machine/turingmachine.hpp"
+#include "util/optionscontainter.hpp"
 #include <string>
 
 using namespace std;
