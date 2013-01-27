@@ -27,7 +27,11 @@ namespace sturing {
 	public:
 
 		Printer();
+		Printer(TuringMachine *givenMachine, OptionsContainter *givenOptions);
 		~Printer();
+
+		void setMachine(TuringMachine *givenMachine);
+		void setOptions(OptionsContainter *givenOptions);
 		
 		//! Printing an error message.
 		void printError(string file, int line, string contents);

@@ -33,7 +33,7 @@ TuringMachine machine;
 OptionsContainter options;
 
 //! Printing messages.
-Printer printer;
+Printer printer(&machine, &options);
 
 int main(int argc, char** argv) {
 

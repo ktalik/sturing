@@ -15,8 +15,21 @@ Printer::Printer() : options(new OptionsContainter()), machine(new TuringMachine
 
 }
 
+Printer::Printer(TuringMachine *givenMachine, OptionsContainter *givenOptions) {
+	machine = givenMachine;
+	options = givenOptions;
+}
+
 Printer::~Printer() {
 
+}
+
+void Printer::setMachine(TuringMachine *givenMachine) {
+	machine = givenMachine;
+}
+
+void Printer::setOptions(OptionsContainter *givenOptions) {
+	options = givenOptions;
 }
 
 void Printer::printError(string file, int line, string contents) {
@@ -26,12 +39,12 @@ void Printer::printError(string file, int line, string contents) {
 		cout << file << ':' << line << ": error: " << contents << '\n';
 		exit(-line);
 	}
-};
+}
 
 
 void Printer::verbosePrint(string contents) {
 	cout << "[I] " << contents << '\n';
-};
+}
 
 
 void Printer::printBoard() {
@@ -107,5 +120,5 @@ void Printer::printBoard() {
 
 	}
 
-};
+}
 
