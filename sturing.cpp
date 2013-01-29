@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
 			argument = argv[i];
 			
 			// Version printing.
-			if ( argument.compare("-v") == 0 || argument.compare("--version") == 0 ) {
+			if ( argument.compare("-n") == 0 || argument.compare("--version") == 0 ) {
 				cout << VERSION << '\n';
 				return 0;
 			
@@ -73,11 +73,11 @@ int main(int argc, char** argv) {
 				options.printLines = true;
 
 			// Be verbose.
-			} else if (argument.compare("-b") == 0 || argument.compare("--verbose") == 0) {
+			} else if (argument.compare("-v") == 0 || argument.compare("--verbose") == 0) {
 				options.verbose = true;
 
 			// Print the table and end the program.
-			} else if (argument.compare("-t") == 0 || argument.compare("--state-board") == 0) {
+			} else if (argument.compare("-b") == 0 || argument.compare("--board") == 0) {
 				options.onlyBoard = true;
 
 			// Print the intial tape.
