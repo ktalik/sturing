@@ -1,14 +1,14 @@
-/*!
- * \brief		Program options containter.
- * \date		2013-01-07
- * \author		Konrad Talik
- * \copyright	GNU Public License.
+/**
+ * @brief	Program options containter.
+ * @date	2013-01-07
+ * @author	Konrad Talik
+ * @copyright	GNU Public License v3.
  */
 
 #ifndef __STURINGOPTIONS__
 #define __STURINGOPTIONS__
 
-//! Variables for options.
+/// Variables for options.
 struct OptionsContainter {
 
 	bool interactive;
@@ -20,5 +20,11 @@ struct OptionsContainter {
 	bool noSpaces;
 
 };
+
+namespace sturing {
+
+void printHelp();
+
+}
 
 #endif

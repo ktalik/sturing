@@ -17,7 +17,6 @@
 #include <cstring>
 
 #include "machine/turingmachine.hpp"
-#include "util/optionscontainter.hpp"
 #include "interpreter/printer.hpp"
 
 using namespace std;
@@ -88,6 +87,11 @@ int main(int argc, char** argv) {
 			// Print the tape without spaces.
 			} else if (argument.compare("-s") == 0 || argument.compare("--no-spaces") == 0) {
 				options.noSpaces = true;
+
+			// Print help.
+			} else if (argument.compare("-h") == 0 || argument.compare("--help") == 0) {
+				printHelp();
+				return 0;
 
 			// Unknown option - source file.
 			} else if (not sourceLoaded) {
@@ -394,8 +398,10 @@ int main(int argc, char** argv) {
 	
 	// In this place everything indicates that we want to run our machine.
 
-	machine.run();
-	machine.printTape();
+	if (machine.numberOfStates() > 0) {
+		machine.run();
+		machine.printTape();
+	}
 
 	return 0;
 }
