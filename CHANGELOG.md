@@ -1,6 +1,15 @@
 STuring - Turing Machine Interpreter - Version Changelog
 ========================================================
 
+sturing 0.1302 - First running simulator
+----------------------------------------
+
+1. Almost everything split up into classes.
+
+2. Turing machine can be started and can perform actions included in given rules.
+
+3. First version of virtual "infinite" tape.
+
 sturing 0.1212 - Basic functionalities
 --------------------------------------
 

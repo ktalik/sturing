@@ -1,7 +1,7 @@
 /**
  * @file	sturing.cpp
  * @brief	sturing - Simple Turing Machine
- * @version	0.1212
+ * @version	0.1302
  * @date	2012-09-11 - 2013-02-26
  * @author	Konrad Talik
  * @license	GNU General Public License v3
@@ -9,7 +9,7 @@
  * Simple Turing Machine Interpreter and Simulator
  */
 
-#define VERSION 0.1212
+#define VERSION 0.1302
 
 #include <ctype.h>
 #include <unistd.h>
