@@ -1,11 +1,12 @@
-/*!
- * \file		sturing.cpp
- * \brief		sturing - Simple Turing Machine / Slimak Turing Machine
- * \description	Simple Turing Machine Interpreter and Simulator
- * \version		0.1212
- * \date		2012-09-11 - 2012-12-28
- * \author		Konrad Talik
- * \license		GNU General Public License
+/**
+ * @file	sturing.cpp
+ * @brief	sturing - Simple Turing Machine
+ * @version	0.1212
+ * @date	2012-09-11 - 2013-02-26
+ * @author	Konrad Talik
+ * @license	GNU General Public License v3
+ *
+ * Simple Turing Machine Interpreter and Simulator
  */
 
 #define VERSION 0.1212
@@ -379,6 +380,12 @@ int main(int argc, char** argv) {
 	if (options.onlyBoard) {
 
 		printer.printBoard();
+		return 0;
+
+	}
+
+	if (!line.compare("exit")) {
+
 		return 0;
 
 	}

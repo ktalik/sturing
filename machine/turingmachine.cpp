@@ -1,5 +1,5 @@
-/*!
- * \file		mac/turingmachine.cpp
+/**
+ * @file	mac/turingmachine.cpp
  */
 
 #include "machine/turingmachine.hpp"
