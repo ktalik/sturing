@@ -7,12 +7,21 @@
 using namespace sturing;
 
 TuringMachine::TuringMachine() {
-	head = tape.begin();
+	// Init the tape.
 	declareCharacter("_");
+	tape.push_front(1);
+	head = tape.begin();
+	tape.push_front(1);
+
 }
 
 TuringMachine::~TuringMachine() {
 
+}
+
+void TuringMachine::setOptions(bool verbose, bool noSpaces) {
+	_verbose = verbose;
+	_noSpaces = noSpaces;
 }
 
 int TuringMachine::declareCharacter(std::string givenCharacter) {
@@ -76,6 +85,35 @@ std::string TuringMachine::getState(int index) {
 	return indexToState[index];
 }
 
+void TuringMachine::run() {
+
+	int currentStateIndex = 1;
+	TuringStateRule currentRule;
+
+	while( true ) {
+
+		currentRule = machine[ currentStateIndex ][ *head ];
+		putOnTape(currentRule.write);
+
+		if (currentRule.move == LEFT) {
+			moveLeft();
+
+		} else if (currentRule.move == RIGHT) {
+			moveRight();
+		}
+
+		if (currentRule.jump == -1) {
+			return;
+
+		} else {
+			currentStateIndex = currentRule.jump;
+
+		}
+
+	}
+
+}
+
 std::map<int, TuringStateRule>& TuringMachine::operator[](size_t index) {
 	return machine[index];
 }
@@ -97,11 +135,6 @@ void TuringMachine::loadTape(std::string givenTapeFileName) {
 	std::ifstream tapeFile( givenTapeFileName.c_str() );
 	std::string tapeString( (std::istreambuf_iterator<char>(tapeFile)), (std::istreambuf_iterator<char>()) );
 	std::string word;
-
-	// Init the tape.
-	tape.push_front(1);
-	head = tape.begin();
-	tape.push_front(1);
 
 	// Every word in line
 	tapeString += ' ';
@@ -129,6 +162,9 @@ void TuringMachine::loadTape(std::string givenTapeFileName) {
 				++length;
 		}
 	}
+
+	head = tape.begin();
+	++head;
 
 }
 
@@ -165,7 +201,3 @@ void TuringMachine::moveLeft() {
 	--head;
 }
 
-void TuringMachine::setOptions(bool verbose, bool noSpaces) {
-	_verbose = verbose;
-	_noSpaces = noSpaces;
-}

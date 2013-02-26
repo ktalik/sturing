@@ -1,9 +1,9 @@
-/*!
- * \file 		int/printer.hpp
- * \brief		Standard messaging class.
- * \date		2012-01-07 - 2012-01-17
- * \author		Konrad Talik
- * \copyright	GNU General Public License.
+/**
+ * @file 	int/printer.hpp
+ * @brief	Standard messaging class.
+ * @date	2012-01-07 - 2012-01-17
+ * @author	Konrad Talik
+ * @copyright	GNU General Public License.v3
  */
 
 #ifndef __STURINGPRINTER__
@@ -33,15 +33,15 @@ namespace sturing {
 		void setMachine(TuringMachine *givenMachine);
 		void setOptions(OptionsContainter *givenOptions);
 		
-		//! Printing an error message.
+		/// Printing an error message.
 		void printError(string file, int line, string contents);
 		
 		
-		//! Printing a verbose text message.
+		/// Printing a verbose text message.
 		void verbosePrint(string contents);
 
 
-		//! Printing a board of states.
+		/// Printing a board of states.
 		void printBoard();
 
 	};

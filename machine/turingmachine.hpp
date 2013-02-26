@@ -76,13 +76,16 @@ struct TuringStateRule {
 		/// Double-side maping of states.
 		std::map<std::string, int> stateToIndex;
 
-		/// Options.
+		// Options.
 		bool _noSpaces, _verbose;
 
 	public:
 
 		TuringMachine();
 		~TuringMachine();
+
+		void setOptions(bool verbose, bool noSpaces);
+		void setPrinter();
 
 		/**
 		 * @brief	Eventually inserts a character into an alphabet.
@@ -100,19 +103,16 @@ struct TuringStateRule {
 		 */
 		int declareState(std::string givenState);
 
-		/**
-		 * @return	The character symbol.
-		 */
+		/// @return	The character symbol.
 		std::string getCharacter(int index);
 	
-		/**
-		 * @return	The state symbol.
-		 */
+		/// @return	The state symbol.
 		std::string getState(int index);
 
-		/**
-		 * Index operator.
-		 */
+		/// Running the machine.
+		void run();
+
+		/// Index operator.
 		std::map<int, TuringStateRule>& operator[](size_t index);
 		const std::map<int, TuringStateRule> operator[](size_t index) const;
 
@@ -124,8 +124,6 @@ struct TuringStateRule {
 		void printTape();
 		void moveRight();
 		void moveLeft();
-
-		void setOptions(bool verbose, bool noSpaces);
 
 	};
 

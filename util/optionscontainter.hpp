@@ -16,7 +16,7 @@ struct OptionsContainter {
 	bool printLines;
 	bool verbose;
 	bool onlyBoard;
-	bool initialTape;
+	bool printInitialTape;
 	bool noSpaces;
 
 };

@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
 	options.printLines = false;
 	options.verbose = false;
 	options.onlyBoard = false;
-	options.initialTape = false;
+	options.printInitialTape = false;
 	options.noSpaces = false;
 
 	/*
@@ -82,8 +82,8 @@ int main(int argc, char** argv) {
 				options.onlyBoard = true;
 
 			// Print the intial tape.
-			} else if (argument.compare("-i") == 0 || argument.compare("--initial-tape") == 0) {
-				options.initialTape = true;
+			} else if (argument.compare("-i") == 0 || argument.compare("--print-initial-tape") == 0) {
+				options.printInitialTape = true;
 
 			// Print the tape without spaces.
 			} else if (argument.compare("-s") == 0 || argument.compare("--no-spaces") == 0) {
@@ -111,7 +111,9 @@ int main(int argc, char** argv) {
 			
 			// If source loaded - tape file.
 			} else {
-				
+				if (options.verbose) {
+					printer.verbosePrint("Loading tape from file '" + argument + "'.");
+				}
 				machine.loadTape( argument );
 
 			}
@@ -120,7 +122,7 @@ int main(int argc, char** argv) {
 
 	machine.setOptions(options.verbose, options.noSpaces);
 
-	if (options.initialTape)
+	if (options.printInitialTape)
 		machine.printTape();
 
 	/*
@@ -390,5 +392,10 @@ int main(int argc, char** argv) {
 
 	}
 	
+	// In this place everything indicates that we want to run our machine.
+
+	machine.run();
+	machine.printTape();
+
 	return 0;
 }
