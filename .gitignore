@@ -1,12 +1,18 @@
 # vim
 *.swp
+*.vim
+
 # source examples
-*.stu
+*.tu
+
 # tapes
 *.tap
+
 # papers
 notes
 doc/*
+*.pdf
+
 # objects, binaries
 *.o
 sturing
