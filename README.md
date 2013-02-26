@@ -44,7 +44,7 @@ Sturing syntax provides C-like comments, as one above. As you can observe, there
 
 There are various keywords used to describe various characteristics:
 
-* encountered character
+* character to be written
 
 	It can be specific character (its name) or one of keywords:
 
