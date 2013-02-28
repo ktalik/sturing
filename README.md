@@ -79,11 +79,11 @@ There are various keywords used to describe various characteristics:
 
 To start interpreting your code, prepare rules and start the machine simulator simply run:
 
-	sturing mycode.tu
+	sturing mycode.t
 
 If you want to use a specific tape written in a file, simply write:
 
-	sturing mycode.tu tape.tap
+	sturing mycode.t tape.tap
 
 The contents of every tape should looks as follows:
 
@@ -113,13 +113,13 @@ Useful options are intended to be helpful with some cases:
 
 2. You are a little bit experienced Turing machine programmer, but interpreter founds an error in your code and your source file is big. You want to take a look at line in which error takes place and see whole source code with line numbers:
 
-		sturing --echo-lines mycode.tu mytape.tap
+		sturing --echo-lines mycode.t mytape.tap
 
 	(the error message will be right below its line)
 
 3. You have performed some computations on binary numbers (or other code) and want to print the results as one word:
 
-		sturing --no-spaces mycode.tu mytape.tap
+		sturing --no-spaces mycode.t mytape.tap
 
 *NOTE:* The `--board` option is currently under development and works nice only with one-sign state names and character names.
 
