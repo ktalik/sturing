@@ -7,21 +7,22 @@
 using namespace sturing;
 
 TuringMachine::TuringMachine() {
-	// Init the tape.
 	declareCharacter("_");
 	tape.push_front(1);
 	head = tape.begin();
 	tape.push_front(1);
-
 }
 
 TuringMachine::~TuringMachine() {
 
 }
 
-void TuringMachine::setOptions(bool verbose, bool noSpaces) {
-	_verbose = verbose;
-	_noSpaces = noSpaces;
+void TuringMachine::setOptions(OptionsContainer *givenOptions) {
+	options = givenOptions;
+}
+
+void TuringMachine::setPrinter(Printer *givenPrinter) {
+	printer = givenPrinter;
 }
 
 int TuringMachine::declareCharacter(std::string givenCharacter) {
@@ -35,8 +36,8 @@ int TuringMachine::declareCharacter(std::string givenCharacter) {
 		characterToIndex[givenCharacter] = characterIndex;
 		indexToCharacter[characterIndex] = givenCharacter;
 
-		if (_verbose) {
-			//verbosePrint("[I] Declaration of a new character '" + givenCharacter + "'.");
+		if (options->verbose) {
+			printer->verbosePrint("[DECLARATION] Declaration of a new character '" + givenCharacter + "'.");
 		}
 
 
@@ -60,8 +61,8 @@ int TuringMachine::declareState(std::string givenState) {
 		stateToIndex[givenState] = stateIndex;
 		indexToState[stateIndex] = givenState;
 
-		if (_verbose) {	
-			//verbosePrint("[I] Declaration of a new state '" + givenState + "'.");
+		if (options->verbose) {
+			printer->verbosePrint("[DECLARATION] Declaration of a new state '" + givenState + "'.");
 		}
 
 
@@ -175,7 +176,7 @@ void TuringMachine::putOnTape(int index) {
 void TuringMachine::printTape() {
 	for (std::list<int>::iterator it = tape.begin(); it != tape.end(); ++it) {
 		std::cout << getCharacter(*it);
-		if ( !_noSpaces )
+		if ( !options->noSpaces )
 			std::cout << ' ';
 	}
 	std::cout << std::endl;
@@ -201,3 +202,77 @@ void TuringMachine::moveLeft() {
 	--head;
 }
 
+void TuringMachine::printBoard() {
+
+	cout << "|*|" << "   " << getState(1) << "   ";
+
+	for (int s = 2; s <= numberOfStates(); ++s) {
+		cout <</* "|*" <<*/ "|   " << getState(s) << "   ";
+	};
+
+	cout << '|' << endl;
+
+	cout << "|-|";
+
+	for (int s = 1; s <= numberOfStates(); ++s) {
+		if (s > 1)
+			cout << "+";//"|-|";
+		cout << "-------";
+	};
+
+	cout << '|' << endl;
+
+	for (int i = 1; i <= numberOfCharacters(); ++i) {
+
+			cout << '|';
+
+			for (int j = 1; j <= numberOfStates(); ++j) {
+
+					if (j == 1) {
+						cout <<  getCharacter(i) << "| ";
+					} else {
+						cout << " ";
+					}
+
+					if ( machine[j][i].write != 0)
+						cout << getCharacter( machine[j][i].write ) << ' ';
+					else
+						cout << "- ";
+
+					switch ( machine[j][i].move  ) {
+
+						case LEFT:
+							cout << '<';
+						break;
+
+						case RIGHT:
+							cout << '>';
+						break;
+
+						case STAY:
+							cout << '=';
+						break;
+
+						case NONE:
+							cout << '-';
+
+					}
+
+					cout << ' ';
+
+					if ( machine[j][i].jump > 0 )
+						cout << getState( machine[j][i].jump );
+					else if ( machine[j][i].jump == 0 )
+						cout << '-';
+					else if ( machine[j][i].jump == -1)
+						cout << '^';
+
+					cout << " |";
+
+			}
+
+			cout << endl;
+
+	}
+
+}

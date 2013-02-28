@@ -9,6 +9,7 @@
 #ifndef __STURINGMACHINE__
 #define __STURINGMACHINE__
 
+#include "interpreter/printer.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -77,8 +78,10 @@ struct TuringStateRule {
 		/// Double-side maping of states.
 		std::map<std::string, int> stateToIndex;
 
-		// Options.
-		bool _noSpaces, _verbose;
+		/// Options.
+		OptionsContainer *options;
+		/// Printer.
+		Printer *printer;
 
 	public:
 
@@ -86,8 +89,10 @@ struct TuringStateRule {
 		TuringMachine();
 		~TuringMachine();
 
-		void setOptions(bool verbose, bool noSpaces);
-		void setPrinter();
+		/// Method used to set a pointer to OptionsContainter object.
+		void setOptions(OptionsContainer *givenOptions);
+		/// Method used to set a pointer to Printer object.
+		void setPrinter(Printer *givenPrinter);
 
 		/**
 		 * @brief	Eventually inserts a character into an alphabet.
@@ -139,6 +144,9 @@ struct TuringStateRule {
 		void moveRight();
 		/// Move head left.
 		void moveLeft();
+
+		/// Printing a board of states.
+		void printBoard();
 
 	};
 

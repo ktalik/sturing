@@ -24,18 +24,19 @@ using namespace sturing;
 
 const char* _prompt = ">>> ";
 
-/*
- * Main container of states and rules.
- */
-TuringMachine machine;
-
-//! Variables for options.
-OptionsContainter options;
-
-//! Printing messages.
-Printer printer(&machine, &options);
-
 int main(int argc, char** argv) {
+
+	/*
+	 * Main container of states and rules.
+	 */
+	TuringMachine machine;
+
+	/// Variables for options.
+	OptionsContainer options;
+
+	/// Printing messages.
+	Printer printer(&options);
+
 
 	options.interactive = true;
 	options.echoMode = false;
@@ -44,6 +45,9 @@ int main(int argc, char** argv) {
 	options.onlyBoard = false;
 	options.printInitialTape = false;
 	options.noSpaces = false;
+
+	machine.setOptions(&options);
+	machine.setPrinter(&printer);
 
 	/*
 	 * Program arguments handling
@@ -124,8 +128,6 @@ int main(int argc, char** argv) {
 		}
 	}
 
-	machine.setOptions(options.verbose, options.noSpaces);
-
 	if (options.printInitialTape)
 		machine.printTape();
 
@@ -168,7 +170,7 @@ int main(int argc, char** argv) {
 	int i;
 
 	// Interpreting every line.
-	while (getline(cin,line) && line.compare("exit") && line.compare("go") && line.compare("GO")) {
+	while (getline(cin,line) && line.compare("\\exit") && line.compare("\\go") && line.compare("\\GO")) {
 
 		// Before interpreting.
 		if (options.echoMode) {
@@ -385,12 +387,12 @@ int main(int argc, char** argv) {
 	
 	if (options.onlyBoard) {
 
-		printer.printBoard();
+		machine.printBoard();
 		return 0;
 
 	}
 
-	if (!line.compare("exit")) {
+	if (!line.compare("\\exit")) {
 
 		return 0;
 

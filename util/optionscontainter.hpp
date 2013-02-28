@@ -8,8 +8,10 @@
 #ifndef __STURINGOPTIONS__
 #define __STURINGOPTIONS__
 
+namespace sturing {
+
 /// Variables for options.
-struct OptionsContainter {
+struct OptionsContainer {
 
 	bool interactive;
 	bool echoMode;
@@ -20,8 +22,6 @@ struct OptionsContainter {
 	bool noSpaces;
 
 };
-
-namespace sturing {
 
 /// Help printing method.
 void printHelp();
