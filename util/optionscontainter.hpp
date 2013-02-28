@@ -23,6 +23,7 @@ struct OptionsContainter {
 
 namespace sturing {
 
+/// Help printing method.
 void printHelp();
 
 }

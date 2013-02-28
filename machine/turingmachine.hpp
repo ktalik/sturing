@@ -53,7 +53,7 @@ struct TuringStateRule {
 	 * @brief	A Turing Machine implementation.
 	 * @date	2012-12-20
 	 * @author	Konrad Talik
-	 * @copyright	GNU Public License.
+	 * @copyright	GNU General Public License v3.
 	 */
 	class TuringMachine {
 
@@ -64,6 +64,7 @@ struct TuringStateRule {
 
 		/// Machine tape.
 		std::list<int> tape;
+		/// Head - a read-write part of the machine.
 		std::list<int>::iterator head;
 
 		/// Double-side maping of characters.
@@ -81,6 +82,7 @@ struct TuringStateRule {
 
 	public:
 
+		/// Constructs a new TuringMachine object.
 		TuringMachine();
 		~TuringMachine();
 
@@ -89,24 +91,24 @@ struct TuringStateRule {
 
 		/**
 		 * @brief	Eventually inserts a character into an alphabet.
-		 * @return	The character index.
+		 * @returns	The character index.
 		 */
 		int declareCharacter(std::string character);
 	
 		/**
 		 * @brief	Eventually inserts a new state into the Machine.
 		 * @param	givenState	Current state name.
-		 * @return	The state index.
+		 * @returns	The state index.
 		 *
 		 * If state does not exist (is not declared) creates a state and assigns to it an unique index.
 		 * Otherwise the index is taken from the dictionary.
 		 */
 		int declareState(std::string givenState);
 
-		/// @return	The character symbol.
+		/// @returns	The character symbol.
 		std::string getCharacter(int index);
 	
-		/// @return	The state symbol.
+		/// @returns	The state symbol.
 		std::string getState(int index);
 
 		/// Running the machine.
@@ -116,13 +118,26 @@ struct TuringStateRule {
 		std::map<int, TuringStateRule>& operator[](size_t index);
 		const std::map<int, TuringStateRule> operator[](size_t index) const;
 
+		/// @returns	The number of characters in the alphabet.
 		int numberOfCharacters();
+		/// @returns	The number of states in the machine.
 		int numberOfStates();
 
+		/** @param	givenTapeFileName	The contents of this file
+		 * will be loaded to memory as a new tape.
+		 */
 		void loadTape(std::string givenTapeFileName);
+
+		/** @param	index	The character of this index
+		 * will be written on the current position of machine's head.
+		 */
 		void putOnTape(int index);
+
+		/// Prints current tape contents to the stdout.
 		void printTape();
+		/// Move head right.
 		void moveRight();
+		/// Move head left.
 		void moveLeft();
 
 	};

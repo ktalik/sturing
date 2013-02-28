@@ -140,26 +140,26 @@ void TuringMachine::loadTape(std::string givenTapeFileName) {
 	tapeString += ' ';
 	int found = -1;
 	int length = 0;
-	//TODO: Place this function in an interpreter class.
+
 	for (int i = 0; i < tapeString.size(); ++i) {
 
 		if (found > -1) {
 
 			if (isspace(tapeString[i])) {
 					
-					word = tapeString.substr(found,length);
-					putOnTape( declareCharacter( word ) );
-					moveRight();
-					found = -1;
-					length = 0;
+				word = tapeString.substr(found,length);
+				putOnTape( declareCharacter( word ) );
+				moveRight();
+				found = -1;
+				length = 0;
 
 			} else {
-					++length;
+				++length;
 			}
 
 		} else if (!isspace(tapeString[i])) {
-				found = i;
-				++length;
+			found = i;
+			++length;
 		}
 	}
 
