@@ -20,7 +20,7 @@ struct OptionsContainer {
 	bool onlyBoard;
 	bool printInitialTape;
 	bool noSpaces;
-	bool stepByStep;
+	bool hideSteps;
 
 };
 

@@ -97,6 +97,10 @@ int main(int argc, char** argv) {
 				printHelp();
 				return 0;
 
+			// Hide step-by-step print.
+			} else if (argument.compare("-x") == 0 || argument.compare("--hide-steps") == 0) {
+				options.hideSteps = true;
+
 			// Unknown option - source file.
 			} else if (not sourceLoaded) {
 				

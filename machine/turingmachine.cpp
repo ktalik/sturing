@@ -93,6 +93,11 @@ void TuringMachine::run() {
 
 	while( true ) {
 
+		if (!options->hideSteps) {
+			printTape();
+			std::cout << "HEAD: " <<  getCharacter(*head) << "\n\n";
+		}
+
 		currentRule = machine[ currentStateIndex ][ *head ];
 		putOnTape(currentRule.write);
 

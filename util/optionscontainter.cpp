@@ -25,6 +25,7 @@ void sturing::printHelp() {
 		<< "  -i, --print-initial-tape      Print initial loaded (or not) tape.\n"
 		<< "  -s, --no-spaces               Do not print spaces between characters\n"
 		<< "                                when printing a tape contents.\n"
+		<< "  -x, --hide-steps              Disable step-by-step printing.\n"
 		<< "\n"
 		<< "This project is under heavy development and this is a very early alpha version.\n"
 		<< "Sturing repository page: https://github.com/ktalik/sturing\n"
