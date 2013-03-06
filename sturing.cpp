@@ -211,7 +211,9 @@ int main(int argc, char** argv) {
 								currentMode = MEETING;
 
 								if (options.verbose) {	
-									printer.verbosePrint("[NEW STATE DEF] Starting a new definition of the state '" + currentState + "'.");
+									printer.verbosePrint(
+										"[NEW STATE DEF] Starting a new definition of the state '"
+										+ currentState + "'.");
 								}
 							
 							} else {
@@ -239,7 +241,9 @@ int main(int argc, char** argv) {
 									currentMode = MEETING;
 								
 									if (options.verbose) {	
-										printer.verbosePrint("[NEW STATE DEF] Starting a new definition of the state '" + currentState + "'.");
+										printer.verbosePrint(
+											"[NEW STATE DEF] Starting a new definition of the state '"
+											+ currentState + "'.");
 									}
 
 								} else {
@@ -249,7 +253,9 @@ int main(int argc, char** argv) {
 									currentMode = WRITE;
 							
 									if (options.verbose) {
-										printer.verbosePrint("[MEETING] Starting a new rule with meeting the character '" + currentCharacter + "'.");
+										printer.verbosePrint(
+											"[MEETING] Starting a new rule with meeting the character '"
+											+ currentCharacter + "'.");
 									}
 
 								}	
@@ -276,7 +282,8 @@ int main(int argc, char** argv) {
 							currentMode = MOVE;
 							
 							if (options.verbose) {
-								printer.verbosePrint("[WRITE] Setting to write a character '" + currentWrite + "' within this rule.");
+								printer.verbosePrint("[WRITE] Setting to write a character '"
+									+ currentWrite + "' within this rule.");
 							}
 
 						break;
@@ -342,7 +349,9 @@ int main(int argc, char** argv) {
 								currentJumpIndex = machine.declareState(currentJump);
 
 								if (options.verbose) {	
-									printer.verbosePrint("[JUMP] Setting to jump to the state '" + machine.getState(currentJumpIndex) + "' within this rule.");
+									printer.verbosePrint(
+										"[JUMP] Setting to jump to the state '"
+										+ machine.getState(currentJumpIndex) + "' within this rule.");
 								}
 
 							}
