@@ -853,15 +853,13 @@ _ _ L %
 %:
 - _ L %
 x _ L %
-0 0 S Stop
-1 1 S Stop
-2 2 S Stop
-3 3 S Stop
-4 4 S Stop
-5 5 S Stop
-6 6 S Stop
-7 7 S Stop
-8 8 S Stop
-9 9 S Stop
-Stop:
-_ _ S ^
+0 0 R ^
+1 1 R ^
+2 2 R ^
+3 3 R ^
+4 4 R ^
+5 5 R ^
+6 6 R ^
+7 7 R ^
+8 8 R ^
+9 9 R ^
