@@ -45,6 +45,8 @@ int main(int argc, char** argv) {
 	options.onlyBoard = false;
 	options.printInitialTape = false;
 	options.noSpaces = false;
+	options.printHead = false;
+	options.hideSteps = false;
 
 	machine.setOptions(&options);
 	machine.setPrinter(&printer);
@@ -96,6 +98,10 @@ int main(int argc, char** argv) {
 			} else if (argument.compare("-h") == 0 || argument.compare("--help") == 0) {
 				printHelp();
 				return 0;
+
+			// Hide step-by-step print.
+			} else if (argument.compare("-d") == 0 || argument.compare("--head") == 0) {
+				options.printHead = true;
 
 			// Hide step-by-step print.
 			} else if (argument.compare("-x") == 0 || argument.compare("--hide-steps") == 0) {

@@ -21,6 +21,7 @@ struct OptionsContainer {
 	bool printInitialTape;
 	bool noSpaces;
 	bool hideSteps;
+	bool printHead;
 
 };
 

@@ -1,5 +1,5 @@
 /**
- * @file	mac/turingmachine.cpp
+ * @file	machine/turingmachine.cpp
  */
 
 #include "machine/turingmachine.hpp"
@@ -95,7 +95,9 @@ void TuringMachine::run() {
 
 		if (!options->hideSteps) {
 			printTape();
-			std::cout << "HEAD: " <<  getCharacter(*head) << "\n\n";
+			if (options->printHead) {
+				std::cout << "HEAD: " <<  getCharacter(*head) << "\n\n";
+			}
 		}
 
 		currentRule = machine[ currentStateIndex ][ *head ];

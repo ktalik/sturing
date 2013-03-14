@@ -1,5 +1,5 @@
 /**
- * @file 	mac/turingmachine.hpp
+ * @file 	machine/turingmachine.hpp
  * @brief	Turing Machine implementation and its help structures.
  * @date	2012-12-20 - 2013-02-26
  * @author	Konrad Talik
