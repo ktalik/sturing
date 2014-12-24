@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ktalik/Sturing.svg?branch=master)](https://travis-ci.org/ktalik/Sturing)
+[![Build Status](https://travis-ci.org/ktalik/sturing.svg?branch=master)](https://travis-ci.org/ktalik/sturing)
 
 Sturing
 =======
