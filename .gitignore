@@ -2,12 +2,6 @@
 *.swp
 *.vim
 
-# source examples
-*.tu
-
-# tapes
-*.tap
-
 # papers
 notes
 doc/*
@@ -16,3 +10,4 @@ doc/*
 # objects, binaries
 *.o
 sturing
+
