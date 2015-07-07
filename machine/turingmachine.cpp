@@ -7,6 +7,7 @@
 using namespace sturing;
 
 TuringMachine::TuringMachine() {
+    options = new OptionsContainer();
 	declareCharacter("_");
 	tape.push_front(1);
 	head = tape.begin();
@@ -18,6 +19,9 @@ TuringMachine::~TuringMachine() {
 }
 
 void TuringMachine::setOptions(OptionsContainer *givenOptions) {
+    if (options) {
+        delete options;
+    }
 	options = givenOptions;
 }
 
@@ -26,7 +30,7 @@ void TuringMachine::setPrinter(Printer *givenPrinter) {
 }
 
 int TuringMachine::declareCharacter(std::string givenCharacter) {
-	
+
 	int characterIndex;
 
 	// Character does not exist.
@@ -40,7 +44,6 @@ int TuringMachine::declareCharacter(std::string givenCharacter) {
 			printer->verbosePrint("[DECLARATION] Declaration of a new character '" + givenCharacter + "'.");
 		}
 
-
 	} else {
 
 		characterIndex = characterToIndex[givenCharacter];
@@ -51,7 +54,7 @@ int TuringMachine::declareCharacter(std::string givenCharacter) {
 }
 
 int TuringMachine::declareState(std::string givenState) {
-	
+
 	int stateIndex;
 
 	// State does not exist.
@@ -69,7 +72,7 @@ int TuringMachine::declareState(std::string givenState) {
 	} else {
 
 		stateIndex = stateToIndex[givenState];
-									
+
 	}
 
 	return stateIndex;
@@ -139,7 +142,7 @@ int TuringMachine::numberOfStates() {
 }
 
 void TuringMachine::loadTape(std::string givenTapeFileName) {
-	
+
 	std::ifstream tapeFile( givenTapeFileName.c_str() );
 	std::string tapeString( (std::istreambuf_iterator<char>(tapeFile)), (std::istreambuf_iterator<char>()) );
 	std::string word;
@@ -154,7 +157,7 @@ void TuringMachine::loadTape(std::string givenTapeFileName) {
 		if (found > -1) {
 
 			if (isspace(tapeString[i])) {
-					
+
 				word = tapeString.substr(found,length);
 				putOnTape( declareCharacter( word ) );
 				moveRight();
@@ -214,7 +217,7 @@ void TuringMachine::printBoard() {
 	cout << "|*|" << "   " << getState(1) << "   ";
 
 	for (int s = 2; s <= numberOfStates(); ++s) {
-		cout <</* "|*" <<*/ "|   " << getState(s) << "   ";
+		cout << "|   " << getState(s) << "   ";
 	};
 
 	cout << '|' << endl;
@@ -223,7 +226,7 @@ void TuringMachine::printBoard() {
 
 	for (int s = 1; s <= numberOfStates(); ++s) {
 		if (s > 1)
-			cout << "+";//"|-|";
+			cout << "+";
 		cout << "-------";
 	};
 

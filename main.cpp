@@ -1,8 +1,6 @@
 /**
- * @file	sturing.cpp
+ * @file	main.cpp
  * @brief	sturing - Simple Turing Machine
- * @version	0.1302
- * @date	2012-09-11 - 2013-02-26
  * @author	Konrad Talik
  * @license	GNU General Public License v3
  *

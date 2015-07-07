@@ -10,13 +10,13 @@ INT=$(wildcard interpreter/*.cpp)
 # Utiility classes.
 UTI=$(wildcard util/*.cpp)
 
-OBJECTS=$(patsubst %.cpp, %.o, $(MAC) $(INT) $(UTI))
+OBJECTS=$(patsubst %.cpp, %.o, $(MAC) $(INT) $(UTI)) main.o
 CC=g++
 FLAGS=-Wall -pedantic
 PROGRAM=sturing
 
 # Link
-$(PROGRAM): $(OBJECTS) sturing.cpp
+$(PROGRAM): $(OBJECTS)
 	$(CC) $^ -o $@ -I ./
 
 # Compile
