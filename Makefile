@@ -12,7 +12,7 @@ UTI=$(wildcard util/*.cpp)
 
 OBJECTS=$(patsubst %.cpp, %.o, $(MAC) $(INT) $(UTI)) main.o
 CC=g++
-FLAGS=-Wall -pedantic
+FLAGS=-Wall -pedantic -g
 PROGRAM=sturing
 
 # Link

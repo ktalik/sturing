@@ -1,9 +1,9 @@
 /**
- * @file 	int/printer.hpp
- * @brief	Standard messaging class.
- * @date	2012-01-07 - 2012-01-17
- * @author	Konrad Talik
- * @copyright	GNU General Public License.v3
+ * @file    int/printer.hpp
+ * @brief   Standard messaging class.
+ * @date    2012-01-07 - 2012-01-17
+ * @author  Konrad Talik
+ * @copyright   GNU General Public License.v3
  */
 
 #ifndef __STURINGPRINTER__
@@ -16,34 +16,34 @@ using namespace std;
 
 namespace sturing {
 
-	/**
-	 * @brief	Standard messaging class.
-	 * Objects of this class are able to print messages,
-	 * following properties of OptionsContainer.
-	 */
-	class Printer {
+    /**
+     * @brief   Standard messaging class.
+     * Objects of this class are able to print messages,
+     * following properties of OptionsContainer.
+     */
+    class Printer {
 
-	private:
+    private:
 
-		OptionsContainer	*options;
+        OptionsContainer    *options;
 
-	public:
+    public:
 
-		/// Constructs a new Printer object.
-		Printer();
-		/// Constructs a new Printer object with given pointer to OptionsContainter.
-		Printer(OptionsContainer *givenOptions);
-		~Printer();
+        /// Constructs a new Printer object.
+        Printer();
+        /// Constructs a new Printer object with given pointer to OptionsContainter.
+        Printer(OptionsContainer *givenOptions);
+        ~Printer();
 
-		/// Method used to set a pointer to OptionsContainter object.
-		void setOptions(OptionsContainer *givenOptions);
-		
-		/// Printing an error message.
-		void printError(string file, int line, string contents);
-		/// Printing a verbose text message.
-		void verbosePrint(string contents);
+        /// Method used to set a pointer to OptionsContainter object.
+        void setOptions(OptionsContainer *givenOptions);
 
-	};
+        /// Printing an error message.
+        void printError(string file, int line, string contents);
+        /// Printing a verbose text message.
+        void verbosePrint(string contents);
+
+    };
 
 }
 
