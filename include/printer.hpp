@@ -1,7 +1,6 @@
 /**
- * @file    int/printer.hpp
+ * @file    printer.hpp
  * @brief   Standard messaging class.
- * @date    2012-01-07 - 2012-01-17
  * @author  Konrad Talik
  * @copyright   GNU General Public License.v3
  */
@@ -9,7 +8,7 @@
 #ifndef __STURINGPRINTER__
 #define __STURINGPRINTER__
 
-#include "util/optionscontainter.hpp"
+#include "optionscontainter.hpp"
 #include <string>
 
 using namespace std;

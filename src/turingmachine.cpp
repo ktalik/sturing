@@ -2,7 +2,7 @@
  * @file    machine/turingmachine.cpp
  */
 
-#include "machine/turingmachine.hpp"
+#include "turingmachine.hpp"
 
 using namespace sturing;
 

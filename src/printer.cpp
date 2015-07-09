@@ -1,11 +1,10 @@
 /**
  * @file    int/printer.cpp
- * @date    2012-01-07 - 2012-01-17
  * @author  Konrad Talik
  * @copyright   GNU General Public License v3.
  */
 
-#include "interpreter/printer.hpp"
+#include "printer.hpp"
 #include <cstdlib>
 #include <iostream>
 

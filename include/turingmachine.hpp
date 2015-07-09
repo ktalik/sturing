@@ -1,7 +1,6 @@
 /**
- * @file    machine/turingmachine.hpp
+ * @file    turingmachine.hpp
  * @brief   Turing Machine implementation and its help structures.
- * @date    2012-12-20 - 2013-02-26
  * @author  Konrad Talik
  * @copyright   GNU General Public License v3.
  */
@@ -9,7 +8,7 @@
 #ifndef __STURINGMACHINE__
 #define __STURINGMACHINE__
 
-#include "interpreter/printer.hpp"
+#include "printer.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>

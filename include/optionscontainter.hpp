@@ -1,6 +1,5 @@
 /**
  * @brief   Program options containter.
- * @date    2013-01-07
  * @author  Konrad Talik
  * @copyright   GNU Public License v3.
  */

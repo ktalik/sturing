@@ -14,8 +14,8 @@
 #include <fcntl.h>
 #include <cstring>
 
-#include "machine/turingmachine.hpp"
-#include "interpreter/printer.hpp"
+#include "turingmachine.hpp"
+#include "printer.hpp"
 
 using namespace std;
 using namespace sturing;
