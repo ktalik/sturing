@@ -7,13 +7,13 @@ CXXFLAGS = -Wall -pedantic -g
 PROGRAM = sturing
 
 $(PROGRAM): $(OBJECTS)
-	mkdir -p bin
 	$(CC) $^ -o $@ -I include
 
 %.o: %.cpp
 	$(CC) -c $< -o $@ -I include
 
 bin/%.o: src/%.cpp
+	mkdir -p bin
 	$(CC) -c $< -o $@ -I include
 
 clean:
