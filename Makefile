@@ -7,6 +7,7 @@ CXXFLAGS = -Wall -pedantic -g
 PROGRAM = sturing
 
 $(PROGRAM): $(OBJECTS)
+	mkdir -p bin
 	$(CC) $^ -o $@ -I include
 
 %.o: %.cpp
