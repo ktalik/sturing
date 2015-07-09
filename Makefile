@@ -1,34 +1,20 @@
-# ./Makefile
-# STuring makefile.
+# STuring Makefile
 
-# Machine-related clases.
-MAC=$(wildcard machine/*.cpp)
+SOURCES = $(wildcard src/*.cpp)
+OBJECTS = $(patsubst src/%.cpp, bin/%.o, $(SOURCES)) main.o
+CC = g++
+CXXFLAGS = -Wall -pedantic -g
+PROGRAM = sturing
 
-# Interpreter-related classes.
-INT=$(wildcard interpreter/*.cpp)
-
-# Utiility classes.
-UTI=$(wildcard util/*.cpp)
-
-OBJECTS=$(patsubst %.cpp, %.o, $(MAC) $(INT) $(UTI)) main.o
-CC=g++
-FLAGS=-Wall -pedantic
-PROGRAM=sturing
-
-# Link
 $(PROGRAM): $(OBJECTS)
-	$(CC) $^ -o $@ -I ./
+	$(CC) $^ -o $@ -I include
 
-# Compile
 %.o: %.cpp
-	$(CC) -c $< -o $@ -I ./
+	$(CC) -c $< -o $@ -I include
 
-%.o: %.cpp %.hpp
-	$(CC) -c $< -o $@ -I ./
+bin/%.o: src/%.cpp
+	mkdir -p bin
+	$(CC) -c $< -o $@ -I include
 
-# Rebuild
-rebuild: clean $(PROGRAM)
-
-# Clean
 clean:
-	rm -rf $(PROGRAM) $(OBJECTS)
+	rm $(PROGRAM) $(OBJECTS)
