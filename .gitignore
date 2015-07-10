@@ -11,3 +11,6 @@ doc/*
 *.o
 sturing
 
+# tests
+*.act
+*.act.failed

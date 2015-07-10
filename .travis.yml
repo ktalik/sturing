@@ -1,4 +1,9 @@
-language: cpp
 compiler: gcc
-script: make
+language: cpp
 
+# Build lifecycle
+install: make
+script: make tests
+
+# New Travis CI infrastructure
+sudo: false
