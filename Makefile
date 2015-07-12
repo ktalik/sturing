@@ -4,18 +4,16 @@
 SOURCES = $(wildcard src/*.cpp)
 OBJECTS = $(patsubst src/%.cpp, bin/%.o, $(SOURCES)) main.o
 CC = g++
-CXXFLAGS = -Wall -pedantic -g
+INCLUDES = -I include
+CXXFLAGS = -std=c++11 -Wall -pedantic -g $(INCLUDES)
 PROGRAM = sturing
 
 $(PROGRAM): $(OBJECTS)
-	$(CC) $^ -o $@ -I include
-
-%.o: %.cpp
-	$(CC) -c $< -o $@ -I include
+	$(CC) $(CXXFLAGS) $^ -o $@
 
 bin/%.o: src/%.cpp
 	mkdir -p bin
-	$(CC) -c $< -o $@ -I include
+	$(CC) $(CXXFLAGS) -c $< -o $@
 
 clean:
 	rm $(PROGRAM) $(OBJECTS)

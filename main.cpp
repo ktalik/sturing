@@ -175,7 +175,7 @@ int main(int argc, char** argv) {
     // Starting with first state interpretation:
     machineMode currentMode = STATE;
 
-    int i;
+    size_t i;
 
     // Interpreting every line.
     while (getline(cin,line) && line.compare("\\exit") && line.compare("\\go") && line.compare("\\GO")) {

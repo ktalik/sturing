@@ -125,11 +125,11 @@ void TuringMachine::run() {
 
 }
 
-std::map<int, TuringStateRule>& TuringMachine::operator[](size_t index) {
+std::unordered_map<int, TuringStateRule>& TuringMachine::operator[](size_t index) {
     return machine[index];
 }
 
-const std::map<int, TuringStateRule> TuringMachine::operator[](size_t index) const {
+const std::unordered_map<int, TuringStateRule> TuringMachine::operator[](size_t index) const {
     //TODO
 }
 
@@ -152,7 +152,7 @@ void TuringMachine::loadTape(std::string givenTapeFileName) {
     int found = -1;
     int length = 0;
 
-    for (int i = 0; i < tapeString.size(); ++i) {
+    for (size_t i = 0; i < tapeString.size(); ++i) {
 
         if (found > -1) {
 

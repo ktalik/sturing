@@ -13,7 +13,7 @@
 #include <fstream>
 #include <string>
 #include <list>
-#include <map>
+#include <unordered_map>
 
 namespace sturing {
 
@@ -60,7 +60,7 @@ struct TuringStateRule {
     private:
 
         /// Main container of rules in states.
-        std::map <int, std::map <int, TuringStateRule> > machine;
+        std::unordered_map <int, std::unordered_map <int, TuringStateRule> > machine;
 
         /// Machine tape.
         std::list<int> tape;
@@ -68,14 +68,14 @@ struct TuringStateRule {
         std::list<int>::iterator head;
 
         /// Double-side maping of characters.
-        std::map<int, std::string> indexToCharacter;
+        std::unordered_map<int, std::string> indexToCharacter;
         /// Double-side maping of characters.
-        std::map<std::string, int> characterToIndex;
+        std::unordered_map<std::string, int> characterToIndex;
 
         /// Double-side maping of states.
-        std::map<int, std::string> indexToState;
+        std::unordered_map<int, std::string> indexToState;
         /// Double-side maping of states.
-        std::map<std::string, int> stateToIndex;
+        std::unordered_map<std::string, int> stateToIndex;
 
         /// Options.
         OptionsContainer *options;
@@ -119,8 +119,8 @@ struct TuringStateRule {
         void run();
 
         /// Index operator.
-        std::map<int, TuringStateRule>& operator[](size_t index);
-        const std::map<int, TuringStateRule> operator[](size_t index) const;
+        std::unordered_map<int, TuringStateRule>& operator[](size_t index);
+        const std::unordered_map<int, TuringStateRule> operator[](size_t index) const;
 
         /// @returns    The number of characters in the alphabet.
         int numberOfCharacters();
