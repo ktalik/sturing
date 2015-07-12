@@ -2,8 +2,7 @@ compiler: gcc
 language: cpp
 
 # Build lifecycle
+before_install:
+    - sudo apt-get install -qq g++-4.8
 install: make
 script: make tests
-
-# New Travis CI infrastructure
-sudo: false
