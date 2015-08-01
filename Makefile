@@ -5,7 +5,6 @@ SOURCES = $(wildcard src/*.cpp)
 OBJECTS = $(patsubst src/%.cpp, bin/%.o, $(SOURCES)) main.o
 INCLUDES = -I include
 CXXFLAGS = -std=c++11 -Wall -pedantic -g $(INCLUDES)
-SHELL = /bin/bash
 PROGRAM = sturing
 
 $(PROGRAM): $(OBJECTS)
